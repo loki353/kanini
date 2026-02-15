@@ -1,2 +1,0 @@
-# kanini
-hackathon
