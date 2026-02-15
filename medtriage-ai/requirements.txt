@@ -1,9 +1,8 @@
 fastapi
 uvicorn
 jinja2
-python-multipart
 pandas
 joblib
 reportlab
 pymongo
-scikit-learn
+python-multipart
