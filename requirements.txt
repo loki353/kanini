@@ -5,6 +5,8 @@ python-multipart
 pandas
 joblib
 scikit-learn
-reportlab
-itsdangerous
+xgboost
 pymongo
+itsdangerous
+reportlab
+
