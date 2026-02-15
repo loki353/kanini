@@ -1,9 +1,10 @@
 fastapi
 uvicorn
 jinja2
-pandas
-scikit-learn
-joblib
 python-multipart
-itsdangerous
+pandas
+joblib
+scikit-learn
 reportlab
+itsdangerous
+pymongo
