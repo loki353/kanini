@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Top Navbar -->
+<div class="bg-slate-900 text-white p-5 shadow flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-bold">🏥 MedTriage AI</h1>
+        <p class="text-teal-400 text-sm">Patient Details</p>
+    </div>
+    <a href="/dashboard"
+       class="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700">
+        ← Back to Dashboard
+    </a>
+</div>
+
+<!-- Main Container -->
+<div class="max-w-5xl mx-auto mt-10">
+
+    <div class="bg-white shadow-xl rounded-xl p-8">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center border-b pb-4 mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">
+                    Patient: {{ patient.name }}
+                </h2>
+                <p class="text-gray-500">ID: {{ patient.patient_id }}</p>
+            </div>
+
+            <!-- Risk Badge -->
+            <div>
+                {% if patient.risk == "High" %}
+                    <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full font-semibold">
+                        High Risk
+                    </span>
+                {% elif patient.risk == "Medium" %}
+                    <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-semibold">
+                        Medium Risk
+                    </span>
+                {% elif patient.risk == "Low" %}
+                    <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
+                        Low Risk
+                    </span>
+                {% else %}
+                    <span class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-semibold">
+                        Not Analyzed
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-2 gap-6">
+
+            <!-- Basic Info -->
+            <div class="bg-gray-50 p-5 rounded-lg shadow-sm">
+                <h3 class="font-semibold text-lg mb-3 text-gray-700">
+                    Basic Information
+                </h3>
+                <p><strong>Age:</strong> {{ patient.age }}</p>
+                <p><strong>Gender:</strong> {{ patient.gender }}</p>
+                <p><strong>Condition:</strong> {{ patient.condition }}</p>
+                <p><strong>Symptoms:</strong> 
+                    {{ patient.symptoms if patient.symptoms else "None" }}
+                </p>
+            </div>
+
+            <!-- Vitals -->
+            <div class="bg-gray-50 p-5 rounded-lg shadow-sm">
+                <h3 class="font-semibold text-lg mb-3 text-gray-700">
+                    Vital Signs
+                </h3>
+                <p><strong>Blood Pressure:</strong> {{ patient.bp }}</p>
+                <p><strong>Heart Rate:</strong> {{ patient.hr }}</p>
+                <p><strong>Temperature:</strong> {{ "%.1f"|format(patient.temp) }} °C</p>
+            </div>
+
+            <!-- AI Analysis -->
+            <div class="bg-blue-50 p-5 rounded-lg shadow-sm col-span-2">
+                <h3 class="font-semibold text-lg mb-3 text-gray-700">
+                    AI Analysis
+                </h3>
+
+                <p><strong>Risk Level:</strong> {{ patient.risk or "Not analyzed" }}</p>
+                <p><strong>Recommended Department:</strong> 
+                    {{ patient.department or "—" }}
+                </p>
+                <p><strong>Confidence:</strong> 
+                    {{ patient.confidence or "—" }}%
+                </p>
+
+                <!-- Clinical Interpretation -->
+                <div class="mt-4 p-4 bg-white rounded shadow-sm">
+                    <h4 class="font-semibold mb-2">Clinical Interpretation</h4>
+
+                    {% if patient.risk == "High" %}
+                        <p class="text-red-700">
+                            Patient shows critical vital signs. Immediate medical attention is recommended.
+                        </p>
+                    {% elif patient.risk == "Medium" %}
+                        <p class="text-yellow-700">
+                            Patient condition requires monitoring and possible intervention.
+                        </p>
+                    {% elif patient.risk == "Low" %}
+                        <p class="text-green-700">
+                            Patient vitals are stable. Routine care is sufficient.
+                        </p>
+                    {% else %}
+                        <p class="text-gray-600">
+                            Patient has not been analyzed yet.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Recommendations -->
+                <div class="mt-4 p-4 bg-white rounded shadow-sm">
+                    <h4 class="font-semibold mb-2">Recommended Actions</h4>
+                    <ul class="list-disc ml-6 text-gray-700">
+                        {% if patient.risk == "High" %}
+                            <li>Immediate doctor consultation</li>
+                            <li>Continuous vital monitoring</li>
+                            <li>Possible emergency admission</li>
+                        {% elif patient.risk == "Medium" %}
+                            <li>Schedule medical checkup</li>
+                            <li>Monitor symptoms</li>
+                            <li>Follow prescribed medication</li>
+                        {% elif patient.risk == "Low" %}
+                            <li>Routine observation</li>
+                            <li>Maintain hydration and rest</li>
+                            <li>Follow general health advice</li>
+                        {% else %}
+                            <li>Run analysis first</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Graph -->
+            <div class="bg-white p-5 rounded-lg shadow-sm col-span-2">
+                <h3 class="font-semibold text-lg mb-4 text-gray-700">
+                    Vital Signs Graph
+                </h3>
+                <canvas id="vitalChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-4 mt-8">
+            <a href="/dashboard"
+               class="bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600">
+                Back
+            </a>
+
+            <a href="/patient/{{ patient.patient_id }}/pdf"
+               class="bg-teal-600 text-white px-5 py-2 rounded hover:bg-teal-700">
+                Download PDF
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Chart Script -->
+<script>
+    const ctx = document.getElementById('vitalChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Blood Pressure', 'Heart Rate', 'Temperature'],
+            datasets: [{
+                label: 'Vital Values',
+                data: [
+                    {{ patient.bp }},
+                    {{ patient.hr }},
+                    {{ patient.temp }}
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

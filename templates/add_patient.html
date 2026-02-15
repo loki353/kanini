@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Header -->
+<div class="bg-slate-900 text-white p-6 flex justify-between items-center shadow">
+    <div>
+        <h1 class="text-3xl font-bold">🏥 MedTriage AI</h1>
+        <p class="text-teal-400">Patient Registration</p>
+    </div>
+    <a href="/dashboard"
+       class="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700 transition">
+        Dashboard
+    </a>
+</div>
+
+<!-- Form Card -->
+<div class="max-w-4xl mx-auto mt-10 bg-white p-10 rounded-2xl shadow-lg">
+
+    <h2 class="text-2xl font-bold mb-8 text-gray-800">
+        Add New Patient
+    </h2>
+
+    <form method="post"
+          action="/add_patient"
+          enctype="multipart/form-data"
+          class="space-y-8">
+
+        <!-- Basic Info -->
+        <div>
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                Basic Information
+            </h3>
+
+            <div class="grid grid-cols-2 gap-6">
+                <input name="name"
+                       placeholder="Patient Name"
+                       class="border p-3 rounded-lg"
+                       required>
+
+                <input type="date"
+                       name="dob"
+                       class="border p-3 rounded-lg"
+                       required>
+
+                <select name="gender"
+                        class="border p-3 rounded-lg"
+                        required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Vitals -->
+        <div>
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                Vital Signs
+            </h3>
+
+            <div class="grid grid-cols-3 gap-6">
+                <input name="bp" type="number"
+                       placeholder="Blood Pressure"
+                       class="border p-3 rounded-lg"
+                       required>
+
+                <input name="hr" type="number"
+                       placeholder="Heart Rate"
+                       class="border p-3 rounded-lg"
+                       required>
+
+                <input name="temp" type="number" step="0.1"
+                       placeholder="Temperature"
+                       class="border p-3 rounded-lg"
+                       required>
+            </div>
+        </div>
+
+        <!-- Medical Info -->
+        <div>
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                Medical Information
+            </h3>
+
+            <!-- Condition -->
+            <select name="condition"
+                    class="border p-3 rounded-lg w-full"
+                    required>
+                <option value="" disabled selected>
+                    Select Pre-Existing Condition
+                </option>
+                <option>None</option>
+                <option>Diabetes</option>
+                <option>Hypertension</option>
+                <option>Asthma</option>
+                <option>Heart Disease</option>
+                <option>Kidney Disease</option>
+            </select>
+
+            <!-- Symptoms Multi-select -->
+            <label class="block mt-4 font-semibold">
+                Common Symptoms (hold Ctrl to select multiple)
+            </label>
+            <select name="symptoms[]" multiple
+                    class="border p-3 rounded-lg w-full h-32">
+                <option>Fever</option>
+                <option>Cough</option>
+                <option>Chest Pain</option>
+                <option>Headache</option>
+                <option>Fatigue</option>
+                <option>Shortness of Breath</option>
+                <option>Dizziness</option>
+                <option>Vomiting</option>
+                <option>Blurred Vision</option>
+                <option>Nausea</option>
+                <option>Back Pain</option>
+                <option>Joint Pain</option>
+            </select>
+
+            <!-- Other Symptoms -->
+            <label class="block mt-4 font-semibold">
+                Other Symptoms
+            </label>
+            <input name="custom_symptom"
+                   placeholder="Type additional symptoms"
+                   class="border p-3 rounded-lg w-full">
+        </div>
+
+        <!-- EHR Upload -->
+        <div>
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">
+                Upload Medical Record (Optional)
+            </h3>
+
+            <input type="file"
+                   name="ehr_file"
+                   class="border p-3 rounded-lg w-full"
+                   accept=".pdf,.doc,.docx,.jpg,.png">
+
+            <p class="text-sm text-gray-500 mt-2">
+                Upload EHR/EMR file (PDF, Word, or Image).
+            </p>
+        </div>
+
+        <!-- Submit -->
+        <button
+            class="w-full bg-teal-600 text-white p-3 rounded-lg
+                   hover:bg-teal-700 transition font-semibold">
+            Save Patient
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
